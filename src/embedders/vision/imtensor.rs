@@ -1,17 +1,12 @@
-use std::marker::PhantomData;
-
 use executorch::tensor::{DimOrderType, Scalar, SizesType, StridesType, TensorImpl};
 use image::{DynamicImage, imageops};
-pub trait ImConv: Scalar {
-    type Scalar: Scalar;
-    fn convert_image_to_planar_buffer<const D: usize>(image: DynamicImage) -> Vec<Self::Scalar>;
-}
+use std::marker::PhantomData;
 
 pub struct ImageTensor<const D: usize, S: Scalar + ImConv> {
     s: PhantomData<S>,
     data: Vec<S>,
 }
-impl<const D: usize, S: ImConv<Scalar = S>> ImageTensor<D, S> {
+impl<const D: usize, S: ImConv<Scalar = S> + Scalar> ImageTensor<D, S> {
     pub fn new(image: DynamicImage) -> Self {
         let data: Vec<S> = S::convert_image_to_planar_buffer::<D>(image);
         Self {
@@ -34,98 +29,85 @@ impl<const D: usize, S: ImConv<Scalar = S>> ImageTensor<D, S> {
         Ok(tensor_impl)
     }
 }
-impl ImConv for f32 {
-    type Scalar = Self;
+
+pub trait ImConv: Sized {
+    type Scalar: Scalar;
+
+    /// Helper to convert an f32 value into the target Scalar type
+    fn from_f32(val: f32) -> Self::Scalar;
+
+    /// Converts image to planar buffer WITHOUT applying mean and standard deviation
     fn convert_image_to_planar_buffer<const D: usize>(image: DynamicImage) -> Vec<Self::Scalar> {
+        // We reuse the normalized logic with identity weights to avoid duplication
+        Self::convert_image_to_planar_buffer_normalized::<D>(
+            image,
+            [0.0, 0.0, 0.0],
+            [1.0, 1.0, 1.0],
+        )
+    }
+
+    /// Converts image to planar buffer and normalizes channels using: (pixel - mean) / std
+    fn convert_image_to_planar_buffer_normalized<const D: usize>(
+        image: DynamicImage,
+        mean: [f32; 3],
+        std: [f32; 3],
+    ) -> Vec<Self::Scalar> {
         // Resize to ViT input resolution
         let resized = image
             .resize_exact(D as u32, D as u32, imageops::FilterType::Nearest)
             .to_rgb8();
+
         let width = D;
         let height = D;
         let channels = 3usize;
-        // NCHW layout: 1 x 3 x D x D
-        // Tensor shape in memory:
-        // [R channel][G channel][B channel]
-        let mut tensor = vec![0.0f32; channels * width * height];
+
+        // Allocate space for NCHW layout: 1 x 3 x D x D
+        let mut tensor = Vec::with_capacity(channels * width * height);
+
+        tensor.resize_with(channels * width * height, || Self::from_f32(0.0));
+
         for y in 0..height {
             for x in 0..width {
                 let pixel = resized.get_pixel(x as u32, y as u32);
-                let r = pixel[0] as f32 / 255.0;
-                let g = pixel[1] as f32 / 255.0;
-                let b = pixel[2] as f32 / 255.0;
+
+                let r = ((pixel[0] as f32 / 255.0) - mean[0]) / std[0];
+                let g = ((pixel[1] as f32 / 255.0) - mean[1]) / std[1];
+                let b = ((pixel[2] as f32 / 255.0) - mean[2]) / std[2];
+
                 let idx = y * width + x;
-                // Channel-major (planar) layout
-                tensor[idx] = r; // R plane
-                tensor[width * height + idx] = g; // G plane
-                tensor[2 * width * height + idx] = b; // B plane
+
+                // Channel-major (planar) layout mapping
+                tensor[idx] = Self::from_f32(r); // R plane
+                tensor[width * height + idx] = Self::from_f32(g); // G plane
+                tensor[2 * width * height + idx] = Self::from_f32(b); // B plane
             }
         }
         tensor
     }
 }
+
+impl ImConv for f32 {
+    type Scalar = Self;
+    #[inline(always)]
+    fn from_f32(val: f32) -> Self::Scalar {
+        val
+    }
+}
+
 #[cfg(feature = "half")]
 impl ImConv for half::f16 {
     type Scalar = Self;
-
-    fn convert_image_to_planar_buffer<const D: usize>(image: DynamicImage) -> Vec<Self::Scalar> {
-        // Resize to ViT input resolution
-        let resized = image
-            .resize_exact(D as u32, D as u32, imageops::FilterType::Nearest)
-            .to_rgb8();
-        let width = D;
-        let height = D;
-        let channels = 3usize;
-        // NCHW layout: 1 x 3 x D x D
-        // Tensor shape in memory:
-        // [R channel][G channel][B channel]
-        let mut tensor = vec![half::f16::from_f32(0.0); channels * width * height];
-        for y in 0..height {
-            for x in 0..width {
-                let pixel = resized.get_pixel(x as u32, y as u32);
-                let r = pixel[0] as f32 / 255.0;
-                let g = pixel[1] as f32 / 255.0;
-                let b = pixel[2] as f32 / 255.0;
-                let idx = y * width + x;
-                // Channel-major (planar) layout
-                tensor[idx] = half::f16::from_f32(r); // R plane
-                tensor[width * height + idx] = half::f16::from_f32(g); // G plane
-                tensor[2 * width * height + idx] = half::f16::from_f32(b); // B plane
-            }
-        }
-        tensor
+    #[inline(always)]
+    fn from_f32(val: f32) -> Self::Scalar {
+        half::f16::from_f32(val)
     }
 }
 
 #[cfg(feature = "half")]
 impl ImConv for half::bf16 {
     type Scalar = Self;
-
-    fn convert_image_to_planar_buffer<const D: usize>(image: DynamicImage) -> Vec<Self::Scalar> {
-        // Resize to ViT input resolution
-        let resized = image
-            .resize_exact(D as u32, D as u32, imageops::FilterType::Nearest)
-            .to_rgb8();
-        let width = D;
-        let height = D;
-        let channels = 3usize;
-        // NCHW layout: 1 x 3 x D x D
-        // Tensor shape in memory:
-        // [R channel][G channel][B channel]
-        let mut tensor = vec![half::bf16::from_f32(0.0); channels * width * height];
-        for y in 0..height {
-            for x in 0..width {
-                let pixel = resized.get_pixel(x as u32, y as u32);
-                let r = pixel[0] as f32 / 255.0;
-                let g = pixel[1] as f32 / 255.0;
-                let b = pixel[2] as f32 / 255.0;
-                let idx = y * width + x;
-                // Channel-major (planar) layout
-                tensor[idx] = half::bf16::from_f32(r); // R plane
-                tensor[width * height + idx] = half::bf16::from_f32(g); // G plane
-                tensor[2 * width * height + idx] = half::bf16::from_f32(b); // B plane
-            }
-        }
-        tensor
+    #[inline(always)]
+    fn from_f32(val: f32) -> Self::Scalar {
+        half::bf16::from_f32(val)
     }
 }
