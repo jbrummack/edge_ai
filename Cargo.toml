@@ -1,0 +1,17 @@
+[package]
+name = "edge_ai"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+half = "2.7.1"
+image = "0.25.10"
+outlines-core = {version = "0.2", default-features = false}
+sentencepiece = "0.13"
+thiserror = "2.0.18"
+tokenizers = "0.23.1"
+usearch = "2.25.3"
+executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "599819745c09dbd0034f47221ae0f73cb4d2a546",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
+
+[features]
+half = ["executorch/half"]
