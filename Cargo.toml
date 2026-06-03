@@ -7,7 +7,7 @@ edition = "2024"
 half = "2.7"
 image = "0.25"
 outlines-core = {version = "0.2", default-features = false}
-sentencepiece = "0.13"
+#sentencepiece = "0.13"
 thiserror = "2"
 tokenizers = "0.23"
 usearch = "2"

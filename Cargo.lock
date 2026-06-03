@@ -374,15 +374,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
 
 [[package]]
-name = "cmake"
-version = "0.1.58"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
-dependencies = [
- "cc",
-]
-
-[[package]]
 name = "cmov"
 version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -757,7 +748,7 @@ dependencies = [
 [[package]]
 name = "download_prebuilt"
 version = "0.1.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=dea2999517228505e2b894bc273c2f82bf1c06b1#dea2999517228505e2b894bc273c2f82bf1c06b1"
 dependencies = [
  "anyhow",
  "futures-util",
@@ -777,7 +768,6 @@ dependencies = [
  "half",
  "image",
  "outlines-core",
- "sentencepiece",
  "thiserror",
  "tokenizers 0.23.1",
  "usearch",
@@ -852,7 +842,7 @@ dependencies = [
 [[package]]
 name = "executorch"
 version = "0.9.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=dea2999517228505e2b894bc273c2f82bf1c06b1#dea2999517228505e2b894bc273c2f82bf1c06b1"
 dependencies = [
  "cfg-if",
  "executorch-sys",
@@ -863,7 +853,7 @@ dependencies = [
 [[package]]
 name = "executorch-prebuilt"
 version = "0.1.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=dea2999517228505e2b894bc273c2f82bf1c06b1#dea2999517228505e2b894bc273c2f82bf1c06b1"
 dependencies = [
  "download_prebuilt",
 ]
@@ -871,7 +861,7 @@ dependencies = [
 [[package]]
 name = "executorch-sys"
 version = "0.9.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=dea2999517228505e2b894bc273c2f82bf1c06b1#dea2999517228505e2b894bc273c2f82bf1c06b1"
 dependencies = [
  "bindgen",
  "cc",
@@ -2142,29 +2132,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "prost"
-version = "0.14.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2ea70524a2f82d518bce41317d0fae74151505651af45faf1ffbd6fd33f0568"
-dependencies = [
- "bytes",
- "prost-derive",
-]
-
-[[package]]
-name = "prost-derive"
-version = "0.14.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27c6023962132f4b30eb4c172c91ce92d933da334c59c23cddee82358ddafb0b"
-dependencies = [
- "anyhow",
- "itertools 0.14.0",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "pxfm"
 version = "0.1.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2536,32 +2503,6 @@ name = "semver"
 version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
-
-[[package]]
-name = "sentencepiece"
-version = "0.13.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3baa1506c7718f6b70bcac5475e563176dd51bb669dae38181abbf3070517453"
-dependencies = [
- "libc",
- "num-derive",
- "num-traits",
- "prost",
- "prost-derive",
- "sentencepiece-sys",
- "thiserror",
-]
-
-[[package]]
-name = "sentencepiece-sys"
-version = "0.13.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa4f9b54dc005df8ec1c3f9e2347cea6b6657ec5460977a982e7a4e09ef49411"
-dependencies = [
- "cc",
- "cmake",
- "pkg-config",
-]
 
 [[package]]
 name = "serde"
