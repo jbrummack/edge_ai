@@ -4,13 +4,13 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-half = "2.7.1"
-image = "0.25.10"
+half = "2.7"
+image = "0.25"
 outlines-core = {version = "0.2", default-features = false}
 sentencepiece = "0.13"
-thiserror = "2.0.18"
-tokenizers = "0.23.1"
-usearch = "2.25.3"
+thiserror = "2"
+tokenizers = "0.23"
+usearch = "2"
 executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "d4b746f4c593960af2652f0f18651a42d72d6efc",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
 
 [features]

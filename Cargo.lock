@@ -757,7 +757,7 @@ dependencies = [
 [[package]]
 name = "download_prebuilt"
 version = "0.1.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=599819745c09dbd0034f47221ae0f73cb4d2a546#599819745c09dbd0034f47221ae0f73cb4d2a546"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
 dependencies = [
  "anyhow",
  "futures-util",
@@ -852,7 +852,7 @@ dependencies = [
 [[package]]
 name = "executorch"
 version = "0.9.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=599819745c09dbd0034f47221ae0f73cb4d2a546#599819745c09dbd0034f47221ae0f73cb4d2a546"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
 dependencies = [
  "cfg-if",
  "executorch-sys",
@@ -863,7 +863,7 @@ dependencies = [
 [[package]]
 name = "executorch-prebuilt"
 version = "0.1.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=599819745c09dbd0034f47221ae0f73cb4d2a546#599819745c09dbd0034f47221ae0f73cb4d2a546"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
 dependencies = [
  "download_prebuilt",
 ]
@@ -871,7 +871,7 @@ dependencies = [
 [[package]]
 name = "executorch-sys"
 version = "0.9.0"
-source = "git+https://github.com/jbrummack/executorch-rs.git?rev=599819745c09dbd0034f47221ae0f73cb4d2a546#599819745c09dbd0034f47221ae0f73cb4d2a546"
+source = "git+https://github.com/jbrummack/executorch-rs.git?rev=d4b746f4c593960af2652f0f18651a42d72d6efc#d4b746f4c593960af2652f0f18651a42d72d6efc"
 dependencies = [
  "bindgen",
  "cc",
