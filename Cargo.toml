@@ -11,7 +11,7 @@ sentencepiece = "0.13"
 thiserror = "2"
 tokenizers = "0.23"
 usearch = "2"
-executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "d4b746f4c593960af2652f0f18651a42d72d6efc",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
+executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "dea2999517228505e2b894bc273c2f82bf1c06b1",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
 
 [features]
 default = ["half"]
