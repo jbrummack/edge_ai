@@ -11,7 +11,7 @@ outlines-core = {version = "0.2", default-features = false}
 thiserror = "2"
 tokenizers = "0.23"
 usearch = "2"
-executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "dea2999517228505e2b894bc273c2f82bf1c06b1",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
+executorch = { git = "https://github.com/jbrummack/executorch-rs.git", rev = "375843007a2a5a5969a4335cbd000b7416ca4198",  features = ["ndarray","xnnpack","quantised_kernels","module","download_prebuilt", "optimised_kernels","coreml"]}
 
 [features]
 default = ["half"]
