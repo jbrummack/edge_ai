@@ -2,7 +2,9 @@ use std::path::Path;
 
 use executorch::{
     evalue::{EValue, IntoEValue},
-    module::Module,
+    event_tracer::{self, ETDumpGen, EventTracer, EventTracerPtr},
+    module::{Module, ModuleBuilder},
+    platform::{LogEntry, PlatformImpl},
     tensor::Tensor,
 };
 use image::DynamicImage;
@@ -13,8 +15,13 @@ type EResult<T> = Result<T, crate::error::Error>;
 pub struct VModel<'a, const D: usize> {
     module: Module<'a>,
 }
+
 impl<'a, const D: usize> VModel<'a, D> {
     pub fn new(file_path: impl AsRef<Path>) -> EResult<Self> {
+        let cml_cache = std::env::var("COREML_CACHE_DIR");
+        println!("CML CACHE: {cml_cache:?}");
+        //std::env::set_var("COREML_CACHE_DIR", documents_dir);
+        //let mut module = ModuleBuilder::new(file_path).event_tracer(dumper).build();
         let mut module = Module::new(file_path);
         module.load(None)?;
         Ok(Self { module })
@@ -37,6 +44,7 @@ impl<'a, const D: usize> VModel<'a, D> {
         println!("t_impl");
         let t = Tensor::new(&t_impl);
         println!("fwd");
+
         let outputs = self.module.forward(&[t.into_evalue()])?;
         println!("embs");
         let embeddings = outputs.get(0).ok_or(crate::error::Error::NoOutput(0))?;
