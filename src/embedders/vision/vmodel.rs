@@ -2,7 +2,6 @@ use std::path::Path;
 
 use executorch::{
     evalue::{EValue, IntoEValue},
-    event_tracer::{self, ETDumpGen, EventTracer, EventTracerPtr},
     module::{Module, ModuleBuilder},
     platform::{LogEntry, PlatformImpl},
     tensor::Tensor,
