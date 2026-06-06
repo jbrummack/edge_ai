@@ -17,6 +17,7 @@ pub struct VModel<'a, const D: usize> {
 impl<'a, const D: usize> VModel<'a, D> {
     pub fn new(file_path: impl AsRef<Path>) -> EResult<Self> {
         let cml_cache = std::env::var("COREML_CACHE_DIR");
+        executorch::platform::backend::ensure_backends();
         println!("CML CACHE: {cml_cache:?}");
         println!(
             "Active backends: {:?}",
