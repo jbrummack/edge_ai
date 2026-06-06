@@ -2,8 +2,7 @@ use std::path::Path;
 
 use executorch::{
     evalue::{EValue, IntoEValue},
-    module::{Module, ModuleBuilder},
-    platform::{LogEntry, PlatformImpl},
+    module::Module,
     tensor::Tensor,
 };
 use image::DynamicImage;
@@ -19,6 +18,10 @@ impl<'a, const D: usize> VModel<'a, D> {
     pub fn new(file_path: impl AsRef<Path>) -> EResult<Self> {
         let cml_cache = std::env::var("COREML_CACHE_DIR");
         println!("CML CACHE: {cml_cache:?}");
+        println!(
+            "Active backends: {:?}",
+            executorch::platform::backend::list_backends()
+        );
         //std::env::set_var("COREML_CACHE_DIR", documents_dir);
         //let mut module = ModuleBuilder::new(file_path).event_tracer(dumper).build();
         let mut module = Module::new(file_path);
